@@ -25,7 +25,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     private final Environment environment;
 
     private static final String[] PUBLIC_MATCHER = {
-            "/h2-console/**"
+            "/h2-console/**",
+            "/users/**"
     };
 
     @Autowired
