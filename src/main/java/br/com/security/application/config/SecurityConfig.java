@@ -1,6 +1,7 @@
 package br.com.security.application.config;
 
 import br.com.security.application.security.JWTAuthenticationFilter;
+import br.com.security.application.security.JWTAuthorizationFilter;
 import br.com.security.application.security.JWTUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -31,8 +32,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     private final JWTUtil jwtUtil;
 
     private static final String[] PUBLIC_MATCHER = {
-            "/h2-console/**",
-            "/users/**"
+            "/h2-console/**"
     };
 
     @Autowired
@@ -54,6 +54,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
             .antMatchers(PUBLIC_MATCHER).permitAll()
             .anyRequest().authenticated();
         http.addFilter(new JWTAuthenticationFilter(authenticationManager(), jwtUtil));
+        http.addFilter(new JWTAuthorizationFilter(authenticationManager(), jwtUtil, userDetailsService));
         http.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
     }
 

@@ -1,5 +1,6 @@
 package br.com.security.application.security;
 
+import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import org.springframework.beans.factory.annotation.Value;
@@ -45,5 +46,36 @@ public class JWTUtil {
                 .setExpiration(expiration)
                 .signWith(SignatureAlgorithm.HS512, secret.getBytes())
                 .compact();
+    }
+
+    public boolean tokenValid(String token) {
+        Claims claims = getClaims(token);
+
+        if(claims != null) {
+            String username = claims.getSubject();
+            Date expiration = claims.getExpiration();
+
+            if(username != null && expiration != null && new Date(System.currentTimeMillis()).before(expiration)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public String getUsername(String token) {
+        Claims claims = getClaims(token);
+
+        if(claims != null) {
+            return claims.getSubject();
+        }
+        return null;
+    }
+
+    private Claims getClaims(String token) {
+        try {
+            return Jwts.parser().setSigningKey(secret.getBytes()).parseClaimsJws(token).getBody();
+        } catch (Exception e) {
+            return null;
+        }
     }
 }
