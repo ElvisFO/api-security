@@ -1,6 +1,7 @@
 package br.com.security.application.security;
 
 import br.com.security.application.dto.CredentialsDTO;
+import br.com.security.application.util.JsonUtils;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -17,6 +18,8 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.Map;
+
+import static java.lang.String.valueOf;
 
 /**
  * @author Elvis Fernandes on 22/10/19
@@ -49,12 +52,12 @@ public class JWTAuthenticationFilter extends UsernamePasswordAuthenticationFilte
     protected void successfulAuthentication(HttpServletRequest request, HttpServletResponse response, FilterChain chain, Authentication auth) throws IOException, ServletException {
 
         String username = ((UserSS) auth.getPrincipal()).getUsername();
-        String token = jwtUtil.generateTokenHeader(username);
-        response.addHeader("Authorization", "Bearer ".concat(token));
+        Map<String, Object> map = jwtUtil.generateTokenBody(username);
+        response.addHeader("Authorization", "Bearer ".concat(valueOf(map.get("token"))));
 
-        /*response.setStatus(200);
+        response.setStatus(200);
         response.setContentType("application/json");
-        response.getWriter().append(jwtUtil.generateTokenBody(username));*/
+        response.getWriter().append(JsonUtils.toJson(map));
 
     }
 

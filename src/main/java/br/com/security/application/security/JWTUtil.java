@@ -1,7 +1,5 @@
 package br.com.security.application.security;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import org.springframework.beans.factory.annotation.Value;
@@ -31,18 +29,14 @@ public class JWTUtil {
                     .compact();
     }
 
-    public String generateTokenBody(String username) {
+    public Map<String, Object> generateTokenBody(String username) {
 
         Date expiration = new Date(System.currentTimeMillis() + this.expiration);
         Map<String, Object> map = new HashMap<>();
         map.put("token", this.generateToken(username, expiration));
         map.put("expiration", expiration);
 
-        try {
-            return new ObjectMapper().writeValueAsString(map);
-        } catch (JsonProcessingException e) {
-            return null;
-        }
+        return map;
     }
 
     private String generateToken(String username, Date expiration) {
