@@ -11,5 +11,5 @@ spring:
         format_sql: true
 jwt:
   secret: SequenciaDeCaracteresParaAssinarToken
-  #expiration: 86400000
-  expiration: 60000
+  #expiration: 86400000 60000
+  expiration: 86400000
