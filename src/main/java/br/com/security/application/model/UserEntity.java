@@ -4,14 +4,12 @@ import br.com.security.application.model.enums.Profile;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.Data;
-import lombok.NoArgsConstructor;
 import org.hibernate.envers.Audited;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import javax.persistence.*;
 import java.util.HashSet;
 import java.util.Set;
-import java.util.stream.Collectors;
 
 /**
  * @author Elvis Fernandes on 20/10/19
@@ -36,17 +34,18 @@ public class UserEntity extends AbstractAuditedEntity {
 
     @ElementCollection(fetch = FetchType.EAGER)
     @CollectionTable(name = "tb_profiles")
-    private Set<Integer> profiles = new HashSet<>();
+    @Enumerated(EnumType.STRING)
+    private Set<Profile> profiles = new HashSet<>();
 
     public UserEntity() {
         this.addProfile(Profile.USER);
     }
 
     public Set<Profile> getProfiles() {
-        return this.profiles.stream().map(p -> Profile.toEnum(p)).collect(Collectors.toSet());
+        return this.profiles;
     }
 
     public void addProfile(Profile profile) {
-        this.profiles.add(profile.getId());
+        this.profiles.add(profile);
     }
 }

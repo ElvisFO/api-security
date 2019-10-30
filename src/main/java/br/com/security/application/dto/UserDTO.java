@@ -1,5 +1,6 @@
 package br.com.security.application.dto;
 
+import br.com.security.application.model.enums.Profile;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -19,5 +20,5 @@ public class UserDTO implements Serializable {
     private String name;
     private String email;
     private String password;
-    private Set<Integer> profiles = new HashSet<>();
+    private Set<Profile> profiles = new HashSet<>();
 }

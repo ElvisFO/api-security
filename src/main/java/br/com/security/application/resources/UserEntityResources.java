@@ -1,20 +1,17 @@
 package br.com.security.application.resources;
 
-import br.com.security.application.commons.SecurityUtils;
 import br.com.security.application.dto.UserDTO;
+import br.com.security.application.mapper.entity.UserEntityModelMapper;
 import br.com.security.application.model.UserEntity;
 import br.com.security.application.repository.UserEntityRepository;
-import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.util.List;
-import java.util.Optional;
 
 /**
  * @author Elvis Fernandes on 21/10/19
@@ -24,10 +21,12 @@ import java.util.Optional;
 public class UserEntityResources {
 
     private final UserEntityRepository service;
+    private final UserEntityModelMapper userEntityModelMapper;
 
     @Autowired
-    public UserEntityResources(UserEntityRepository service) {
+    public UserEntityResources(UserEntityRepository service, UserEntityModelMapper userEntityModelMapper) {
         this.service = service;
+        this.userEntityModelMapper = userEntityModelMapper;
     }
 
     @GetMapping
@@ -44,9 +43,7 @@ public class UserEntityResources {
     @PreAuthorize("hasAnyRole('ADMIN')")
     @PostMapping
     public ResponseEntity<?> save(@Valid @RequestBody UserDTO dto) {
-        Optional<UserDetails> currentUser = SecurityUtils.getCurrentUser();
-        UserEntity entity = new UserEntity();
-        BeanUtils.copyProperties(dto, entity);
-        return ResponseEntity.status(HttpStatus.CREATED).body(this.service.save(entity));
+        UserEntity entity = this.userEntityModelMapper.convertToEntity(dto);
+        return ResponseEntity.status(HttpStatus.CREATED).body(this.userEntityModelMapper.convertToDto(this.service.save(entity)));
     }
 }
