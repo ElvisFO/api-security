@@ -3,6 +3,7 @@ package br.com.security.application.model;
 import br.com.security.application.model.enums.Profile;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import org.hibernate.envers.Audited;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
@@ -14,6 +15,7 @@ import java.util.Set;
 /**
  * @author Elvis Fernandes on 20/10/19
  */
+@Builder
 @Entity
 @Table(name = "tb_users")
 @Data

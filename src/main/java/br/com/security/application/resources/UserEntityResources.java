@@ -46,4 +46,11 @@ public class UserEntityResources {
         UserEntity entity = this.userEntityModelMapper.convertToEntity(dto);
         return ResponseEntity.status(HttpStatus.CREATED).body(this.userEntityModelMapper.convertToDto(this.service.save(entity)));
     }
+
+    @PreAuthorize("hasAnyRole('ADMIN')")
+    @DeleteMapping("/{id}")
+    public ResponseEntity<?> save(@PathVariable Long id) {
+        this.service.deleteById(id);
+        return ResponseEntity.noContent().build();
+    }
 }
