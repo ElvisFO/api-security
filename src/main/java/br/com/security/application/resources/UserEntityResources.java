@@ -1,6 +1,7 @@
 package br.com.security.application.resources;
 
 import br.com.security.application.dto.UserDTO;
+import br.com.security.application.exceptionhandler.exception.ObjectNotFoundException;
 import br.com.security.application.mapper.entity.UserEntityModelMapper;
 import br.com.security.application.model.UserEntity;
 import br.com.security.application.repository.UserEntityRepository;
@@ -37,7 +38,7 @@ public class UserEntityResources {
 
     @GetMapping("/{id}")
     public ResponseEntity<UserEntity> findById(@PathVariable Long id) {
-        return ResponseEntity.ok(this.service.findById(id).orElseThrow(() -> new RuntimeException("User not found")));
+        return ResponseEntity.ok(this.service.findById(id).orElseThrow(() -> new ObjectNotFoundException("error.job.notfound")));
     }
 
     @PreAuthorize("hasAnyRole('ADMIN')")
