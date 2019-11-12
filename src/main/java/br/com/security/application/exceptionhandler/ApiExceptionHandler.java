@@ -1,5 +1,6 @@
 package br.com.security.application.exceptionhandler;
 
+import br.com.security.application.exceptionhandler.exception.AuthorizationException;
 import br.com.security.application.exceptionhandler.exception.ObjectNotFoundException;
 import br.com.security.application.exceptionhandler.helper.StandardError;
 import br.com.security.application.exceptionhandler.helper.ValidationError;
@@ -73,10 +74,17 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
         return ResponseEntity.status(NOT_FOUND).body(err);
     }
 
-    @ExceptionHandler(RuntimeException.class)
+    @ExceptionHandler({Exception.class})
     public ResponseEntity<StandardError> runtimeException(RuntimeException e, HttpServletRequest request) {
 
         StandardError err = new StandardError(System.currentTimeMillis(), INTERNAL_SERVER_ERROR.value(), "Unexpected error", e.getMessage(), request.getRequestURI(), e.getClass().getName());
         return ResponseEntity.status(INTERNAL_SERVER_ERROR).body(err);
+    }
+
+    @ExceptionHandler(AuthorizationException.class)
+    public ResponseEntity<StandardError> authorizationException(AuthorizationException e, HttpServletRequest request) {
+
+        StandardError err = new StandardError(System.currentTimeMillis(), FORBIDDEN.value(), "Acesso negado", e.getMessage(), request.getRequestURI(), e.getClass().getName());
+        return ResponseEntity.status(FORBIDDEN).body(err);
     }
 }

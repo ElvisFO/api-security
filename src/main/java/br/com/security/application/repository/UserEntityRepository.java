@@ -3,6 +3,7 @@ package br.com.security.application.repository;
 import br.com.security.application.model.UserEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Optional;
 
@@ -12,5 +13,9 @@ import java.util.Optional;
 @Repository
 public interface UserEntityRepository extends JpaRepository<UserEntity, Long> {
 
-    Optional<UserEntity> findByEmailAndActiveTrue(String email);
+    @Transactional(readOnly = true)
+    Optional<UserEntity> findByEmailIgnoreCaseAndActiveTrue(String email);
+
+    @Transactional(readOnly = true)
+    Optional<UserEntity> findByEmailIgnoreCase(String email);
 }

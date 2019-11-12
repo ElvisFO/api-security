@@ -1,4 +1,4 @@
-package br.com.security.application.service;
+package br.com.security.application.service.impl;
 
 import br.com.security.application.model.UserEntity;
 import br.com.security.application.model.enums.Profile;

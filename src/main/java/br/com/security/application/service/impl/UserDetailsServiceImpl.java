@@ -1,8 +1,9 @@
-package br.com.security.application.service;
+package br.com.security.application.service.impl;
 
 import br.com.security.application.model.UserEntity;
 import br.com.security.application.repository.UserEntityRepository;
 import br.com.security.application.security.UserSS;
+import br.com.security.application.service.UserEntityService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -15,17 +16,17 @@ import org.springframework.stereotype.Service;
 @Service
 public class UserDetailsServiceImpl implements UserDetailsService {
 
-    private final UserEntityRepository repository;
+    private final UserEntityService service;
 
     @Autowired
-    public UserDetailsServiceImpl(UserEntityRepository repository) {
-        this.repository = repository;
+    public UserDetailsServiceImpl(UserEntityService service) {
+        this.service = service;
     }
 
     @Override
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
 
-        UserEntity userEntity = this.repository.findByEmailAndActiveTrue(email).orElseThrow(() -> new UsernameNotFoundException(email));
+        UserEntity userEntity = this.service.findByEmailIgnoreCaseAndActiveTrue(email).orElseThrow(() -> new UsernameNotFoundException(email));
 
         return new UserSS(userEntity);
     }

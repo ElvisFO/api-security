@@ -1,5 +1,6 @@
 package br.com.security.application.commons;
 
+import br.com.security.application.security.UserSS;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -26,7 +27,7 @@ public class SecurityUtils {
 
         return Optional.ofNullable(securityContext.getAuthentication())
                 .map(authentication -> {
-                    Optional<UserDetails> oUserDetails = getCurrentUser();
+                    Optional<UserSS> oUserDetails = getCurrentUser();
                     if (oUserDetails.isPresent()) {
                         return oUserDetails.get().getUsername();
                     }
@@ -42,14 +43,14 @@ public class SecurityUtils {
      *
      * @return username
      */
-    public static Optional<UserDetails> getCurrentUser() {
+    public static Optional<UserSS> getCurrentUser() {
 
         final SecurityContext securityContext = SecurityContextHolder.getContext();
 
         return Optional.ofNullable(securityContext.getAuthentication())
                 .map(authentication -> {
                     if (authentication.getPrincipal() instanceof UserDetails) {
-                        return (UserDetails) authentication.getPrincipal();
+                        return (UserSS) authentication.getPrincipal();
                     }
                     return null;
                 });

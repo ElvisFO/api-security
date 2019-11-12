@@ -4,7 +4,7 @@ import br.com.security.application.dto.UserDTO;
 import br.com.security.application.exceptionhandler.exception.ObjectNotFoundException;
 import br.com.security.application.mapper.entity.UserEntityModelMapper;
 import br.com.security.application.model.UserEntity;
-import br.com.security.application.repository.UserEntityRepository;
+import br.com.security.application.service.UserEntityService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -21,11 +21,11 @@ import java.util.List;
 @RequestMapping("/users")
 public class UserEntityResources {
 
-    private final UserEntityRepository service;
+    private final UserEntityService service;
     private final UserEntityModelMapper userEntityModelMapper;
 
     @Autowired
-    public UserEntityResources(UserEntityRepository service, UserEntityModelMapper userEntityModelMapper) {
+    public UserEntityResources(UserEntityService service, UserEntityModelMapper userEntityModelMapper) {
         this.service = service;
         this.userEntityModelMapper = userEntityModelMapper;
     }
@@ -38,7 +38,7 @@ public class UserEntityResources {
 
     @GetMapping("/{id}")
     public ResponseEntity<UserEntity> findById(@PathVariable Long id) {
-        return ResponseEntity.ok(this.service.findById(id).orElseThrow(() -> new ObjectNotFoundException("error.job.notfound")));
+        return ResponseEntity.ok(this.service.findById(id).orElseThrow(() -> new ObjectNotFoundException("error.user.notfound")));
     }
 
     @PreAuthorize("hasAnyRole('ADMIN')")

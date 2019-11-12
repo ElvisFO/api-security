@@ -1,6 +1,7 @@
 package br.com.security.application.security;
 
 import br.com.security.application.model.UserEntity;
+import br.com.security.application.model.enums.Profile;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -14,6 +15,7 @@ import java.util.stream.Collectors;
 public class UserSS implements UserDetails {
 
     private Long id;
+    private String name;
     private String email;
     private String password;
     private Collection<? extends GrantedAuthority> authorities;
@@ -22,8 +24,13 @@ public class UserSS implements UserDetails {
         return this.id;
     }
 
+    public String getName() {
+        return this.name;
+    }
+
     public UserSS(UserEntity userEntity) {
         this.id = userEntity.getId();
+        this.name = userEntity.getName();
         this.email = userEntity.getEmail();
         this.password = userEntity.getPassword();
         this.authorities = userEntity.getProfiles().stream().map(p -> new SimpleGrantedAuthority(p.getDescription())).collect(Collectors.toSet());
@@ -62,5 +69,9 @@ public class UserSS implements UserDetails {
     @Override
     public boolean isEnabled() {
         return true;
+    }
+
+    public boolean hasRole(Profile profile) {
+        return this.authorities.contains(new SimpleGrantedAuthority(profile.getDescription()));
     }
 }

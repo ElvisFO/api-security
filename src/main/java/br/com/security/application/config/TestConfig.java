@@ -1,6 +1,6 @@
 package br.com.security.application.config;
 
-import br.com.security.application.service.DBService;
+import br.com.security.application.service.impl.DBService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
