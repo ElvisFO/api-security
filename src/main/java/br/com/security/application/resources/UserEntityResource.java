@@ -19,13 +19,13 @@ import java.util.List;
  */
 @RestController
 @RequestMapping("/users")
-public class UserEntityResources {
+public class UserEntityResource {
 
     private final UserEntityService service;
     private final UserEntityModelMapper userEntityModelMapper;
 
     @Autowired
-    public UserEntityResources(UserEntityService service, UserEntityModelMapper userEntityModelMapper) {
+    public UserEntityResource(UserEntityService service, UserEntityModelMapper userEntityModelMapper) {
         this.service = service;
         this.userEntityModelMapper = userEntityModelMapper;
     }

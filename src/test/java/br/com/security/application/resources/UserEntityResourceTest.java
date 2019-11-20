@@ -24,7 +24,7 @@ import static org.springframework.http.HttpMethod.GET;
 @ActiveProfiles("test")
 @RunWith(SpringRunner.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.DEFINED_PORT)
-public class UserEntityResourcesTest {
+public class UserEntityResourceTest {
 
     @Autowired
     private TestRestTemplate restTemplate;

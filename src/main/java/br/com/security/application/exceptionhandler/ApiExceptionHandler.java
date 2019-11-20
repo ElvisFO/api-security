@@ -12,9 +12,11 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.FieldError;
+import org.springframework.web.HttpRequestMethodNotSupportedException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
+import org.springframework.web.context.request.ServletWebRequest;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
@@ -84,7 +86,13 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
     @ExceptionHandler(AuthorizationException.class)
     public ResponseEntity<StandardError> authorizationException(AuthorizationException e, HttpServletRequest request) {
 
-        StandardError err = new StandardError(System.currentTimeMillis(), FORBIDDEN.value(), "Acesso negado", e.getMessage(), request.getRequestURI(), e.getClass().getName());
+        StandardError err = new StandardError(System.currentTimeMillis(), FORBIDDEN.value(), "Access Denied", e.getMessage(), request.getRequestURI(), e.getClass().getName());
         return ResponseEntity.status(FORBIDDEN).body(err);
+    }
+
+    @Override
+    protected ResponseEntity<Object> handleHttpRequestMethodNotSupported(HttpRequestMethodNotSupportedException ex, HttpHeaders headers, HttpStatus status, WebRequest request) {
+        StandardError err = new StandardError(System.currentTimeMillis(), METHOD_NOT_ALLOWED.value(), "Method Not Allowed", ex.getMessage(), ((ServletWebRequest) request).getRequest().getRequestURI(), ex.getClass().getName());
+        return ResponseEntity.status(METHOD_NOT_ALLOWED).body(err);
     }
 }
